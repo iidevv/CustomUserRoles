@@ -1,0 +1,16 @@
+XLite\Model\Config:
+  - name: order_limit
+    category: Iidev\CustomUserRoles
+    type: text
+    orderby: 100
+    translations:
+      - code: en
+        option_name: "limit on viewing orders (Per day) for Virtual assistant permission."
+
+XLite\Model\Role\Permission:
+  - { code: "virtual assistant", section: Staff, module: Qualiteam\SkinActFulfillmentStaff, translations: [{ code: en, name: "VA (Virtual assistant)" }] }
+  - { code: "refund orders", section: Staff, module: Qualiteam\SkinActFulfillmentStaff, translations: [{ code: en, name: "Refund orders" }] }
+
+XLite\Model\Role:
+  - { translations: [{ code: en, name: Virtual assistant }], permissions: [{ code: "virtual assistant" }] }
+  - { translations: [{ code: en, name: Refund orders }], permissions: [{ code: "refund orders" }] }

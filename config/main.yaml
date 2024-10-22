@@ -1,0 +1,10 @@
+version: 5.5.0.4
+type: common
+authorName: "Ilya I"
+moduleName: "Custom User Roles"
+description: "This module adds new user roles and permissions."
+minorRequiredCoreVersion: 0
+dependsOn: {}
+incompatibleWith: {}
+showSettingsForm: true
+canDisable: true
