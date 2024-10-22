@@ -1,7 +1,6 @@
 <?php
 
 namespace Iidev\CustomUserRoles\Model;
-use XLite\InjectLoggerTrait;
 
 use XCart\Extender\Mapping\Extender;
 /**
@@ -9,7 +8,6 @@ use XCart\Extender\Mapping\Extender;
  */
 class Profile extends \XLite\Model\Profile
 {
-    use InjectLoggerTrait;
     public function hasPermission($code)
     {
         $result = false;
