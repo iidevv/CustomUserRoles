@@ -3,13 +3,32 @@
 namespace Iidev\CustomUserRoles\Controller\Admin;
 
 use XLite\Core\Auth;
-use \XLite\Core\Database;
+use XLite\Core\Database;
 use XCart\Extender\Mapping\Extender;
+use XLite\Core\TopMessage;
+
 /**
  * @Extender\Mixin
  */
 class Order extends \XLite\Controller\Admin\Order
 {
+    public function handleRequest()
+    {
+        $request = \XLite\Core\Request::getInstance();
+
+        if ($request->action !== 'refund' && $request->action !== 'refundPart' && $request->action !== 'refundMulti') {
+            parent::handleRequest();
+
+            return;
+        }
+
+        if (!Auth::getInstance()->hasPermission('Refund orders')) {
+            TopMessage::addError('You don\'t have permission to process a refund.');
+            return;
+        }
+
+        parent::handleRequest();
+    }
 
     private function checkOrderViewLimit()
     {
@@ -46,7 +65,7 @@ class Order extends \XLite\Controller\Admin\Order
         $remainingLimit = $qb->getQuery()->getSingleScalarResult();
 
         if ($remainingLimit >= $limit) {
-            \XLite\Core\TopMessage::addError('Access denied! You have reached the view limit.');
+            TopMessage::addError('Access denied! You have reached the view limit.');
 
             return false;
         }
@@ -58,6 +77,9 @@ class Order extends \XLite\Controller\Admin\Order
 
     private function handleOrderView($order, $profile, $now): void
     {
+        if (empty($order) || empty($profile))
+            return;
+
         $orderView = new \Iidev\CustomUserRoles\Model\OrderViews();
         $orderView->setOrder($order);
         $orderView->setProfile($profile);
@@ -66,7 +88,6 @@ class Order extends \XLite\Controller\Admin\Order
         Database::getEM()->persist($orderView);
         Database::getEM()->flush();
     }
-
 
     public function checkACL()
     {
@@ -94,7 +115,7 @@ class Order extends \XLite\Controller\Admin\Order
     protected function doActionUpdate()
     {
         if (Auth::getInstance()->hasPermission('Virtual assistant')) {
-            \XLite\Core\TopMessage::addError('Access denied!');
+            TopMessage::addError('Access denied!');
 
             return;
         }
