@@ -22,6 +22,10 @@ class Order extends \XLite\Model\Repo\Order
             return [0];
         }
 
+        if (Auth::getInstance()->hasPermission('Sales Manager')) {
+            return [0];
+        }
+
         return parent::getSearchTotal($cnd);
     }
 }
